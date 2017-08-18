@@ -49,7 +49,7 @@ resource "aws_launch_configuration" "lc_ebs" {
 
   root_block_device {
     delete_on_termination = "${var.root_vol_del_on_termination}"
-    iops = "${var.root_vol_type == "io1" ? root_vol_iops : "0"}"
+    iops = "${var.root_vol_type == "io1" ? var.root_vol_iops : "0"}"
     volume_size = "${var.root_vol_size}"
     volume_type = "${var.root_vol_type}"
   }
@@ -57,7 +57,7 @@ resource "aws_launch_configuration" "lc_ebs" {
   ebs_block_device {
     delete_on_termination = "${var.ebs_vol_del_on_termination}"
     device_name = "${var.ebs_vol_device_name}"
-    encryption = "${length(var.ebs_vol_snapshot_id) > 0 ? "" : "true"}"
+    encrypted = "${length(var.ebs_vol_snapshot_id) > 0 ? "" : "true"}"
     iops = "${var.ebs_vol_type == "io1" ? var.ebs_vol_iops : "0"}"
     snapshot_id = "${var.ebs_vol_snapshot_id}"
     volume_size = "${var.ebs_vol_size}"

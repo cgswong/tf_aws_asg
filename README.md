@@ -26,13 +26,13 @@ A Terraform module for creating an Auto-Scaling Group and a launch configuration
 * `ebs_optimized` - Flag which indicates if EBS optimized storage should be used (should leave as default "true").
 * `root_vol_del_on_terminate` - Flag to delete root volume on instance termination (default to "true").
 * `root_vol_size` - Size in GB of root volume (defaults to "10").
-* `root_vol_type` - Specify the type of storage to use for the root volume, i.e. `io1` (provisioned IOPS SSD), `standard` (magnetic HDD), or the default `gp2` (general purpose SSD). Testing is pending for `st1` (throughput optimized HDD) and `sc1` (cold HDD) which Terraform docs do not mention.
+* `root_vol_type` - Specify the type of storage to use for the root volume, i.e. `io1` (provisioned IOPS SSD), `standard` (magnetic HDD), or the default `gp2` (general purpose SSD).
 * `root_vol_iops` - When using `io1` storage type for the root volume, specify the amount of IOPS to use.
 * `ebs_vol_device_name` - Name to use for device of attached EBS volume.
 * `ebs_vol_snapshot_id` - ID of a snapshot to use for an attached EBS volume.
 * `ebs_vol_del_on_terminate` - Flag to delete attached EBS volume on instance termination (default to "true").
-* `ebs_vol_size` - Size in GB of attached EBS volume (defaults to "10").
-* `ebs_vol_type` - Specify the type of storage to use for an attached EBS volume, i.e. `io1` (provisioned IOPS SSD), `standard` (magnetic HDD), or the default `gp2` (general purpose SSD). Testing is pending for `st1` (throughput optimized HDD) and `sc1` (cold HDD) which Terraform docs do not mention.
+* `ebs_vol_size` - Size in GB of attached EBS volume (defaults to "10"). **Must be 500+ GB for `st1` or `sc1` volume types.**
+* `ebs_vol_type` - Specify the type of storage to use for an attached EBS volume, i.e. `io1` (provisioned IOPS SSD), `standard` (magnetic HDD), `st1` (throughput optimized HDD), `sc1` (cold HDD) or the default `gp2` (general purpose SSD).
 * `ebs_vol_iops` - When using `io1` storage type for an attached EBS volume, specify the amount of IOPS to use.
 * `asg_instances` - The number of instances we want in the ASG. This is used to populate the following ASG settings:
     * max_size
