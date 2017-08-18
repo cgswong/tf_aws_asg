@@ -1,13 +1,19 @@
-//
-// Module: tf_aws_asg
-//
+#
+# Module: tf_aws_asg
+#
 
-// Output the ID of the Launch Config
-output "launch_config_id" {
-    value = "${aws_launch_configuration.launch_config.id}"
+output "lc_id" {
+  value = "${coalesce(join(",", aws_launch_configuration.lc.id), join(",", aws_launch_configuration.lc_ebs.id))}"
 }
 
-// Output the ID of the Launch Config
+output "lc_name" {
+  value = "${coalesce(join(",", aws_launch_configuration.lc.name), join(",", aws_launch_configuration.lc_ebs.name))}"
+}
+
 output "asg_id" {
-    value = "${aws_autoscaling_group.main_asg.id}"
+  value = "${coalesce(join(",", aws_autoscaling_group.asg.id), join(",", aws_autoscaling_group.asg_ebs.id))}"
+}
+
+output "asg_name" {
+  value = "${coalesce(join(",", aws_autoscaling_group.asg.name), join(",", aws_autoscaling_group.asg_ebs.name))}"
 }

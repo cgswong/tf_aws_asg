@@ -1,63 +1,123 @@
-//
-// Module: tf_aws_asg
-//
+#
+# Module: tf_aws_asg
+#
 
-// Module specific variables
-
-// Launch Configuration Variables
-
-variable "lc_name" {}
-variable "ami_id" {}
-variable "instance_type" {}
-variable "iam_instance_profile" {}
-variable "key_name" {}
-variable "security_group" {
-  description = "The security group the instances to use"
+# Module specific variables
+variable "name" {
+  description = "Name prefix to be used in all resources as identifier"
+  default = ""
 }
 
+# Launch Configuration variables
+variable "ami_id" {
+  description = "ID of AMI"
+  default = ""
+}
+variable "instance_type" {
+  description = "Type of instance"
+  default = ""
+}
+variable "iam_instance_profile" {
+  description = "ARN or name of IAM Role or instance profile"
+}
+variable "key_name" {
+  description = "Name of SSH key pair to use for instances"
+  default = ""
+}
+variable "security_group_ids" {
+  description = "A list of security group IDs for instances"
+  default = []
+  type = "list"
+}
 variable "user_data" {
   description = "The path to a file with user_data for the instances"
+  default = ""
+}
+variable "ebs_optimized" {
+  description = "Flag to use EBS-optimized storage (true | false)"
+  default = "true"
 }
 
-// Auto-Scaling Group
-variable "asg_name" {}
-variable "asg_number_of_instances" {
+# Storage variables
+variable "root_vol_del_on_termination" {
+  description = "Flag to delete root volume on instance termination"
+  default = true
+}
+variable "root_vol_iops" {
+  description = "Amount of provisioned IOPS to use for root volume"
+  default = ""
+}
+variable "root_vol_size" {
+  description = "Size in GB of root volume"
+  default = "10"
+}
+variable "root_vol_type" {
+  description = "Type of root volume"
+  default = "gp2"
+}
+
+variable "ebs_vol_device_name" {
+  description = "Name of EBS volume"
+  default = ""
+}
+variable "ebs_vol_del_on_termination" {
+  description = "Flag to delete EBS volume on instance termination"
+  default = true
+}
+variable "ebs_vol_snapshot_id" {
+  description = "ID of snapshot to use for EBS volume"
+  default = ""
+}
+variable "ebs_vol_iops" {
+  description = "Amount of provisioned IOPS to use for EBS volume"
+  default = ""
+}
+variable "ebs_vol_size" {
+  description = "Size in GB of EBS volume"
+  default = "10"
+}
+variable "ebs_vol_type" {
+  description = "Type of EBS volume"
+  default = "gp2"
+}
+
+# Auto-Scaling Group
+variable "asg_instances" {
   description = "The number of instances we want in the ASG"
-  // We use this to populate the following ASG settings
-  // - max_size
-  // - desired_capacity
+  default = ""
+  # We use this to populate the following ASG settings
+  # - max_size
+  # - desired_capacity
 }
-
-variable "asg_minimum_number_of_instances" {
+variable "asg_min_instances" {
   description = "The minimum number of instances the ASG should maintain"
   default = 1
-  // Defaults to 1
-  // Can be set to 0 if you never want the ASG to replace failed instances
+  # Defaults to 1
+  # Can be set to 0 if you never want the ASG to replace failed instances
 }
-
 variable "health_check_grace_period" {
-  description = "Number of seconds for a health check to time out"
+  description = "Number of seconds after instance is in service before starting health check"
   default = 300
 }
 variable "health_check_type" {
+  description = "Type of instance health check (EC2 | ELB)"
   default = "EC2"
-  //Types available are:
-  // - ELB
-  // - EC2
-  // * http://docs.aws.amazon.com/cli/latest/reference/autoscaling/create-auto-scaling-group.html#options
 }
-
-variable "subnet_azs" {
-  description = "The VPC subnet IDs"
-  // comma separated list
+variable "cooldown_time" {
+  description = "Number of seconds between scaling events"
+  default = 120
 }
-
-variable "azs" {
-  description = "Availability Zones"
-  // comma separated list
+variable "protect_scale_in" {
+  description = "Flag to protect instances from termination during scale in"
+  default = "false"
 }
-
-// Variables for providers used in this module
-variable "aws_access_key" {}
-variable "aws_secret_key" {}
-variable "aws_region" {}
+variable "subnet_ids" {
+  description = "A list of subnet IDs in which to launch instances"
+  default = []
+  type = "list"
+}
+variable "tags" {
+  description = "A list of a map of key/value pairs for tags to add to all resources"
+  default = []
+  type = "list"
+}
